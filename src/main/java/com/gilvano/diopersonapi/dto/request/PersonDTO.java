@@ -36,8 +36,7 @@ public class PersonDTO {
     private String cpf;
 
     @NotNull
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate birthDate;
+    private String birthDate;
 
     @Valid
     @NotEmpty
