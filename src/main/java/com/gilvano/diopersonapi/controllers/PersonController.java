@@ -1,7 +1,7 @@
 package com.gilvano.diopersonapi.controllers;
 
 import com.gilvano.diopersonapi.dto.MessageResponseDTO;
-import com.gilvano.diopersonapi.entities.Person;
+import com.gilvano.diopersonapi.dto.request.PersonDTO;
 import com.gilvano.diopersonapi.services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ public class PersonController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createPerson(@RequestBody Person person) {
-        return personService.create(person);
+    public MessageResponseDTO createPerson(@RequestBody PersonDTO personDTO) {
+        return personService.create(personDTO);
     }
 }
