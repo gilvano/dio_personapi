@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,10 +24,7 @@ public class PersonServiceImpl implements PersonService {
     public MessageResponseDTO create(PersonDTO personDTO) {
         Person person = personMapper.toModel(personDTO);
         Person savedPerson = personRepository.save(person);
-        return MessageResponseDTO
-                .builder()
-                .message("Created person with ID " + savedPerson.getId())
-                .build();
+        return createMessageResponseDTO(savedPerson, "Created person with ID ");
     }
 
     @Override
@@ -41,17 +37,33 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonDTO findById(Long id) throws PersonNotFoundException {
-        Person person = getPerson(id);
+        Person person = verifyIfExists(id);
         return personMapper.toDTO(person);
     }
 
     @Override
     public void deleteById(Long id) throws PersonNotFoundException {
-        Person person = getPerson(id);
+        Person person = verifyIfExists(id);
         personRepository.delete(person);
     }
 
-    private Person getPerson(Long id) throws PersonNotFoundException {
+    @Override
+    public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException {
+        verifyIfExists(id);
+
+        Person person = personMapper.toModel(personDTO);
+        Person updatedPerson = personRepository.save(person);
+        return createMessageResponseDTO(updatedPerson, "Updated person with ID ");
+    }
+
+    private MessageResponseDTO createMessageResponseDTO(Person savedPerson, String msg) {
+        return MessageResponseDTO
+                .builder()
+                .message(msg + savedPerson.getId())
+                .build();
+    }
+
+    private Person verifyIfExists(Long id) throws PersonNotFoundException {
         return personRepository.findById(id)
                 .orElseThrow(() -> new PersonNotFoundException(id));
     }
