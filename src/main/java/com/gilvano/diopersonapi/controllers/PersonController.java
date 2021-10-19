@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/person")
 @RequiredArgsConstructor
@@ -18,5 +20,10 @@ public class PersonController {
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO createPerson(@RequestBody PersonDTO personDTO) {
         return personService.create(personDTO);
+    }
+
+    @GetMapping
+    public List<PersonDTO> listAll() {
+        return personService.listAll();
     }
 }
