@@ -41,9 +41,18 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonDTO findById(Long id) throws PersonNotFoundException {
-        Person person = personRepository.findById(id)
-                .orElseThrow(() -> new PersonNotFoundException(id));
-
+        Person person = getPerson(id);
         return personMapper.toDTO(person);
+    }
+
+    @Override
+    public void deleteById(Long id) throws PersonNotFoundException {
+        Person person = getPerson(id);
+        personRepository.delete(person);
+    }
+
+    private Person getPerson(Long id) throws PersonNotFoundException {
+        return personRepository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
     }
 }
