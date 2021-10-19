@@ -3,6 +3,7 @@ package com.gilvano.diopersonapi.services.impl;
 import com.gilvano.diopersonapi.dto.MessageResponseDTO;
 import com.gilvano.diopersonapi.dto.request.PersonDTO;
 import com.gilvano.diopersonapi.entities.Person;
+import com.gilvano.diopersonapi.exception.PersonNotFoundException;
 import com.gilvano.diopersonapi.mapper.PersonMapper;
 import com.gilvano.diopersonapi.repositories.PersonRepository;
 import com.gilvano.diopersonapi.services.PersonService;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,5 +37,13 @@ public class PersonServiceImpl implements PersonService {
         return allPeople.stream()
                 .map(personMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PersonDTO findById(Long id) throws PersonNotFoundException {
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
+
+        return personMapper.toDTO(person);
     }
 }

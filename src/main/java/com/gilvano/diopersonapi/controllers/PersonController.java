@@ -2,6 +2,8 @@ package com.gilvano.diopersonapi.controllers;
 
 import com.gilvano.diopersonapi.dto.MessageResponseDTO;
 import com.gilvano.diopersonapi.dto.request.PersonDTO;
+import com.gilvano.diopersonapi.entities.Person;
+import com.gilvano.diopersonapi.exception.PersonNotFoundException;
 import com.gilvano.diopersonapi.services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,5 +27,10 @@ public class PersonController {
     @GetMapping
     public List<PersonDTO> listAll() {
         return personService.listAll();
+    }
+
+    @GetMapping("/{id}")
+    public PersonDTO findById(@PathVariable Long id) throws PersonNotFoundException {
+        return personService.findById(id);
     }
 }
